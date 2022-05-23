@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import '../model/auth_impl.dart';
 import '../model/intefaces/auth_model.dart';
 import '../views/interfaces/sign_in_view.dart';
@@ -11,15 +9,16 @@ class SignInImpl implements SignInPresenter {
 
   @override
   void submitClick(String email, String password) async {
-    var res = await _authModel.signIn(email, password);
-    if (res.statusCode == 200) {
+    var res = await _authModel.login(email, password);
+    if (res.isNotEmpty) {
+      _view?.showMassage(res);
     } else {
-      // _view?.showMassage();
+      _view?.showMassage("");
     }
   }
 
   @override
-  void setView(SignInView view) {
+  Future<void> setView(SignInView view) async {
     _view = view;
   }
 }
