@@ -26,6 +26,7 @@ class Variant {
   }
 
   factory Variant.fromMap(Map<String, dynamic> map) {
+    //print(map);
     return Variant(
       text: map['text'] ?? '',
       id: map['id']?.toInt() ?? 0,

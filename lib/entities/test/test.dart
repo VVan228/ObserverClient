@@ -1,7 +1,7 @@
 import 'dart:convert';
 
+import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
-
 import 'package:observer_client/entities/test/question.dart';
 import 'package:observer_client/entities/user/user.dart';
 
@@ -12,13 +12,13 @@ class Test {
   List<Question> questions;
   int subjectId;
   String name;
-  User creator;
+  User? creator;
   Test({
     required this.timeLimit,
     required this.questions,
     required this.subjectId,
     required this.name,
-    required this.creator,
+    this.creator,
   });
 
   Test copyWith({
@@ -43,7 +43,7 @@ class Test {
       'questions': questions.map((x) => x.toMap()).toList(),
       'subjectId': subjectId,
       'name': name,
-      'creator': creator.toMap(),
+      'creator': creator?.toMap(),
     };
   }
 
@@ -54,7 +54,7 @@ class Test {
           map['questions']?.map((x) => Question.fromMap(x))),
       subjectId: map['subjectId']?.toInt() ?? 0,
       name: map['name'] ?? '',
-      creator: User.fromMap(map['creator']),
+      creator: map['creator'] != null ? User.fromMap(map['creator']) : null,
     );
   }
 
@@ -70,6 +70,7 @@ class Test {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
+    final listEquals = const DeepCollectionEquality().equals;
 
     return other is Test &&
         other.timeLimit == timeLimit &&

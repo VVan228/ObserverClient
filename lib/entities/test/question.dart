@@ -1,46 +1,30 @@
 import 'dart:convert';
 
+import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
-
 import 'package:observer_client/entities/test/answer.dart';
 import 'package:observer_client/entities/test/question_type.dart';
 import 'package:observer_client/entities/test/variant.dart';
 
 class Question {
-  List<Variant> variants;
-  Answer rightAnswer;
+  //QuestionType.values.firstWhere((e) => e.name == (map['questionType']))
+  List<Variant>? variants;
+  Answer? rightAnswer;
   QuestionType questionType;
   int scoreScale;
   String questionText;
-  Question({
-    required this.variants,
-    required this.rightAnswer,
-    required this.questionType,
-    required this.scoreScale,
-    required this.questionText,
-  });
-
-  Question copyWith({
-    List<Variant>? variants,
-    Answer? rightAnswer,
-    QuestionType? questionType,
-    int? scoreScale,
-    String? questionText,
-  }) {
-    return Question(
-      variants: variants ?? this.variants,
-      rightAnswer: rightAnswer ?? this.rightAnswer,
-      questionType: questionType ?? this.questionType,
-      scoreScale: scoreScale ?? this.scoreScale,
-      questionText: questionText ?? this.questionText,
-    );
-  }
+  Question(
+      {this.variants,
+      this.rightAnswer,
+      required this.scoreScale,
+      required this.questionText,
+      required this.questionType});
 
   Map<String, dynamic> toMap() {
     return {
-      'variants': variants.map((x) => x.toMap()).toList(),
-      'rightAnswer': rightAnswer.toMap(),
       'questionType': questionType.name,
+      'variants': variants?.map((x) => x.toMap()).toList(),
+      'rightAnswer': rightAnswer?.toMap(),
       'scoreScale': scoreScale,
       'questionText': questionText,
     };
@@ -48,13 +32,17 @@ class Question {
 
   factory Question.fromMap(Map<String, dynamic> map) {
     return Question(
-      variants:
-          List<Variant>.from(map['variants']?.map((x) => Variant.fromMap(x))),
-      rightAnswer: Answer.fromMap(map['rightAnswer']),
-      questionType: map['questionType'],
-      scoreScale: map['scoreScale']?.toInt() ?? 0,
-      questionText: map['questionText'] ?? '',
-    );
+        variants: map['variants'] != null
+            ? List<Variant>.from(
+                map['variants']?.map((x) => Variant.fromMap(x)))
+            : null,
+        rightAnswer: map['rightAnswer'] != null
+            ? Answer.fromMap(map['rightAnswer'])
+            : null,
+        scoreScale: map['scoreScale']?.toInt() ?? 0,
+        questionText: map['questionText'] ?? '',
+        questionType: QuestionType.values
+            .firstWhere((e) => e.name == (map['questionType'])));
   }
 
   String toJson() => json.encode(toMap());
@@ -64,17 +52,17 @@ class Question {
 
   @override
   String toString() {
-    return 'Question(variants: $variants, rightAnswer: $rightAnswer, questionType $questionType scoreScale: $scoreScale, questionText: $questionText)';
+    return 'Question(questionType: $questionType, variants: $variants, rightAnswer: $rightAnswer, scoreScale: $scoreScale, questionText: $questionText)';
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
+    final listEquals = const DeepCollectionEquality().equals;
 
     return other is Question &&
         listEquals(other.variants, variants) &&
         other.rightAnswer == rightAnswer &&
-        other.questionType == questionType &&
         other.scoreScale == scoreScale &&
         other.questionText == questionText;
   }
@@ -83,7 +71,6 @@ class Question {
   int get hashCode {
     return variants.hashCode ^
         rightAnswer.hashCode ^
-        questionType.hashCode ^
         scoreScale.hashCode ^
         questionText.hashCode;
   }

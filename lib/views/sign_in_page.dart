@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../model/auth_impl.dart';
-import '../model/intefaces/auth_model.dart';
+import '../model/auth_model.dart';
 import '../presenters/interfaces/sign_in_presenter.dart';
 import '../presenters/sign_in_impl.dart';
 import 'interfaces/sign_in_view.dart';
@@ -47,7 +46,7 @@ class SignInForm extends StatefulWidget {
 }
 
 class _SignInFormState extends State<SignInForm> implements SignInView {
-  AuthModel auth = AuthImpl();
+  AuthModel auth = AuthModel.getInstance();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 

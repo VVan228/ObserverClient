@@ -1,15 +1,15 @@
 import 'dart:convert';
 
+import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
-
 import 'package:observer_client/entities/test/variant.dart';
 
 class Answer {
-  List<Variant> closedAnswer;
-  String openAnswer;
+  List<Variant>? closedAnswer;
+  String? openAnswer = "";
   Answer({
-    required this.closedAnswer,
-    required this.openAnswer,
+    this.closedAnswer,
+    this.openAnswer,
   });
 
   Answer copyWith({
@@ -24,16 +24,18 @@ class Answer {
 
   Map<String, dynamic> toMap() {
     return {
-      'closedAnswer': closedAnswer.map((x) => x.toMap()).toList(),
+      'closedAnswer': closedAnswer?.map((x) => x.toMap()).toList(),
       'openAnswer': openAnswer,
     };
   }
 
   factory Answer.fromMap(Map<String, dynamic> map) {
     return Answer(
-      closedAnswer: List<Variant>.from(
-          map['closedAnswer']?.map((x) => Variant.fromMap(x))),
-      openAnswer: map['openAnswer'] ?? '',
+      closedAnswer: map['closedAnswer'] != null
+          ? List<Variant>.from(
+              map['closedAnswer']?.map((x) => Variant.fromMap(x)))
+          : null,
+      openAnswer: map['openAnswer'],
     );
   }
 
@@ -48,6 +50,7 @@ class Answer {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
+    final listEquals = const DeepCollectionEquality().equals;
 
     return other is Answer &&
         listEquals(other.closedAnswer, closedAnswer) &&
