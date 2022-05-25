@@ -1,30 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:observer_client/entities/global/subject.dart';
+import 'package:observer_client/entities/global/subject_plain.dart';
 import 'package:observer_client/entities/user/role.dart';
 import 'package:observer_client/model/users_model.dart';
 import 'package:observer_client/presenters/user_list_impl.dart';
 import 'package:observer_client/views/interfaces/student_list_view.dart';
+import 'package:observer_client/views/interfaces/subject_list_view.dart';
 
 import '../entities/user/user.dart';
+import '../presenters/subject_list_impl.dart';
 
-class StudentList extends StatefulWidget {
-  final Role role = Role.STUDENT;
-
-  const StudentList({Key? key}) : super(key: key);
-
-  //Role role = Role.STUDENT;
-
+class SubjectList extends StatefulWidget {
+  const SubjectList({Key? key}) : super(key: key);
   @override
-  State<StudentList> createState() => _StudentListState();
+  State<SubjectList> createState() => _SubjectList();
 }
 
-class _StudentListState extends State<StudentList> implements UserListView {
+class _SubjectList extends State<SubjectList> implements SubjectListView {
   int _selectedIndex = 0;
   UserModel userModel = UserModel.getInstanse();
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-  List<User?> users = [null];
+  List<SubjectPlain?> subjects = [null];
 
-  UserListImpl presenter = UserListImpl();
+  SubjectListImpl presenter = SubjectListImpl();
 
   @override
   void initState() {
@@ -40,20 +39,15 @@ class _StudentListState extends State<StudentList> implements UserListView {
   }
 
   @override
-  Role getRole() {
-    return widget.role;
-  }
-
-  @override
-  void addUser(User user) {
+  void addSubject(SubjectPlain subject) {
     setState(() {
-      users.insert(0, user);
+      subjects.insert(0, subject);
     });
   }
 
   @override
-  void removeAllUsers() {
-    users = [null];
+  void removeAllSubjects() {
+    subjects = [null];
   }
 
   @override
@@ -62,9 +56,9 @@ class _StudentListState extends State<StudentList> implements UserListView {
         child: ConstrainedBox(
       child: ListView.builder(
           scrollDirection: Axis.vertical,
-          itemCount: users.length,
+          itemCount: subjects.length,
           itemBuilder: (context, index) {
-            if (index == users.length - 1) {
+            if (index == subjects.length - 1) {
               return IconButton(
                 icon: Icon(Icons.update),
                 onPressed: () {
@@ -72,8 +66,7 @@ class _StudentListState extends State<StudentList> implements UserListView {
                 },
               );
             }
-            String name = users[index]?.name ?? '';
-            String email = users[index]?.email ?? '';
+            String name = subjects[index]?.name ?? '';
             return Card(
               child: Padding(
                 padding: EdgeInsets.all(15),
@@ -85,9 +78,6 @@ class _StudentListState extends State<StudentList> implements UserListView {
                       name,
                       style: Theme.of(context).textTheme.headline6,
                     ),
-                    Text(email,
-                        style:
-                            TextStyle(color: Theme.of(context).disabledColor)),
                   ],
                 ),
               ),

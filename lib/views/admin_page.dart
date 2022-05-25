@@ -9,9 +9,11 @@ import 'package:observer_client/views/interfaces/admin_page_view.dart';
 import 'package:observer_client/views/interfaces/student_list_view.dart';
 import 'package:observer_client/views/sign_in_page.dart';
 import 'package:observer_client/views/student_list.dart';
+import 'package:observer_client/views/subjects_list.dart';
 import 'package:observer_client/views/teacher_list.dart';
 import 'package:observer_client/views/testing_grounds.dart';
 
+import '../entities/global/subject.dart';
 import '../entities/user/user.dart';
 
 class AdminPage extends StatelessWidget {
@@ -19,7 +21,6 @@ class AdminPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("running");
     AuthModel auth = AuthModel.getInstance();
     var isLogged = auth.isLogged();
 
@@ -56,10 +57,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget>
   static const List<Widget> _widgetOptions = <Widget>[
     StudentList(),
     TeacherList(),
-    Text(
-      'Index 2: School',
-      style: optionStyle,
-    ),
+    SubjectList(),
   ];
 
   void _onItemTapped(int index) {
@@ -81,22 +79,18 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget>
           }
       }
       _selectedIndex = index;
-      print(_widgetOptions.elementAt(_selectedIndex).hashCode);
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: Visibility(
-        child: FloatingActionButton(
-          onPressed: () async {
-            presenter.addClicked();
-          },
-          tooltip: 'add student',
-          child: const Icon(Icons.add),
-        ),
-        visible: currentRole != null,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          presenter.addClicked();
+        },
+        tooltip: 'add student',
+        child: const Icon(Icons.add),
       ),
       appBar: AppBar(
         title: const Text('Пункт управления'),
@@ -142,6 +136,70 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget>
   void initState() {
     presenter.setView(this);
     super.initState();
+  }
+
+  @override
+  bool isSubjectListPageOpened() {
+    return currentRole == null;
+  }
+
+  @override
+  Future<Subject?> getSubjectData() async {
+    if (currentRole != null) {
+      return null;
+    }
+    final _nameController = TextEditingController();
+    Subject? subject = await showDialog(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Добавить предмет"),
+          content: SingleChildScrollView(
+            child: TextFormField(
+              controller: _nameController,
+              decoration: const InputDecoration(hintText: 'имя'),
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              style: ButtonStyle(
+                foregroundColor: MaterialStateProperty.resolveWith(
+                    (Set<MaterialState> states) {
+                  return Theme.of(context).colorScheme.background;
+                }),
+                backgroundColor: MaterialStateProperty.resolveWith(
+                    (Set<MaterialState> states) {
+                  return Colors.white;
+                }),
+              ),
+              child: const Text('отмена'),
+              onPressed: () {
+                Navigator.pop(context, null);
+              },
+            ),
+            TextButton(
+              style: ButtonStyle(
+                foregroundColor: MaterialStateProperty.resolveWith(
+                    (Set<MaterialState> states) {
+                  return Colors.white;
+                }),
+                backgroundColor: MaterialStateProperty.resolveWith(
+                    (Set<MaterialState> states) {
+                  return Theme.of(context).colorScheme.secondary;
+                }),
+              ),
+              child: const Text('ок'),
+              onPressed: () {
+                // debugPrint(_nameController.text + " alert");
+                Navigator.pop(context, Subject(name: _nameController.text));
+              },
+            ),
+          ],
+        );
+      },
+    );
+    return subject;
   }
 
   @override

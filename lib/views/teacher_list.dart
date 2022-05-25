@@ -28,7 +28,6 @@ class _StudentListState extends State<TeacherList> implements UserListView {
 
   @override
   void initState() {
-    print(widget.role);
     presenter.setView(this);
     presenter.initialized();
     super.initState();
