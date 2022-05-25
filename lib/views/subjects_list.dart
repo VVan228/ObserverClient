@@ -4,6 +4,7 @@ import 'package:observer_client/entities/global/subject_plain.dart';
 import 'package:observer_client/entities/user/role.dart';
 import 'package:observer_client/model/users_model.dart';
 import 'package:observer_client/presenters/user_list_impl.dart';
+import 'package:observer_client/views/add_teacher_page.dart';
 import 'package:observer_client/views/interfaces/student_list_view.dart';
 import 'package:observer_client/views/interfaces/subject_list_view.dart';
 
@@ -67,18 +68,30 @@ class _SubjectList extends State<SubjectList> implements SubjectListView {
               );
             }
             String name = subjects[index]?.name ?? '';
-            return Card(
-              child: Padding(
-                padding: EdgeInsets.all(15),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text(
-                      name,
-                      style: Theme.of(context).textTheme.headline6,
-                    ),
-                  ],
+            int subjectId = subjects[index]?.id ?? 1;
+            return GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => AddTeacherPage(
+                            subjectId: subjectId,
+                          )),
+                );
+              },
+              child: Card(
+                child: Padding(
+                  padding: EdgeInsets.all(15),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        name,
+                        style: Theme.of(context).textTheme.headline6,
+                      ),
+                    ],
+                  ),
                 ),
               ),
             );

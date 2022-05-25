@@ -1,3 +1,5 @@
+import 'package:observer_client/entities/global/group.dart';
+import 'package:observer_client/model/hierarchy_model.dart';
 import 'package:observer_client/model/users_model.dart';
 
 import '../entities/user/role.dart';
@@ -7,6 +9,7 @@ import '../views/interfaces/student_list_view.dart';
 class UserListImpl {
   UserListView? _view;
   UserModel userModel = UserModel.getInstanse();
+  HierarchyModel hierarchyModel = HierarchyModel.getInstanse();
 
   Future<void> setView(UserListView view) async {
     _view = view;
@@ -31,5 +34,15 @@ class UserListImpl {
     users.forEach((element) {
       _view?.addUser(element);
     });
+  }
+
+  void openGroupDialog(int userId) async {
+    List<String>? labels = await hierarchyModel.getLabels();
+    List<Group>? groups =
+        await hierarchyModel.getGroupsByLevel((labels?.length ?? 1) - 1);
+    int? groupId = await _view?.getGroupId(groups ?? []);
+    if (groupId != null) {
+      hierarchyModel.addStudentToGroup(groupId, userId);
+    }
   }
 }

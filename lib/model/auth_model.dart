@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -17,7 +18,7 @@ class AuthModel {
   static AuthModel? obj;
   //Role userRole = Role.STUDENT;
 
-  Future<bool> isLogged() async {
+  Future<Role?> isLogged() async {
     tokens ??= await getTokens();
     String refreshToken = tokens?["refresh_token"] ?? "";
     String accessToken = tokens?["access_token"] ?? "";
@@ -27,9 +28,14 @@ class AuthModel {
     //  userRole = User.getRoleByString(stringUserRole);
     //}
 
-    return tokens?["refresh_token"] != null &&
-        tokens?["access_token"] != null &&
+    bool isLogged = refreshToken.isNotEmpty &&
+        accessToken.isNotEmpty &&
         !JwtDecoder.isExpired(refreshToken);
+
+    if (isLogged) {
+      print("logged " + JwtDecoder.decode(refreshToken)["role"]);
+      return User.getRoleByString(JwtDecoder.decode(refreshToken)["role"]);
+    }
   }
 
   Future<String> login(String email, String password) async {
@@ -43,12 +49,14 @@ class AuthModel {
       return bodyMap["message"];
     }
 
-    setTokens(bodyMap["refresh_token"], bodyMap["access_token"]);
+    await setTokens(bodyMap["refresh_token"], bodyMap["access_token"]);
     return "";
   }
 
-  Future<String> logout() {
-    throw UnimplementedError();
+  Future<void> logout(context) async {
+    tokens = null;
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.clear();
   }
 
   Future<void> setTokens(String refreshToken, String accessToken) async {
@@ -57,10 +65,9 @@ class AuthModel {
     final prefs = await SharedPreferences.getInstance();
     prefs.setString('refresh_token', refreshToken);
     prefs.setString('access_token', accessToken);
-    tokens = {
-      "refresh_token": prefs.getString('refresh_token'),
-      "access_token": prefs.getString('access_token')
-    };
+    tokens ??= {};
+    tokens?["refresh_token"] = prefs.getString('refresh_token');
+    tokens?["access_token"] = prefs.getString('access_token');
   }
 
   Future<Map<String, String?>> getTokens() async {

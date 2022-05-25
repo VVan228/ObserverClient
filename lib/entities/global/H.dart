@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:collection/collection.dart';
 
 class H {
+  int? id;
   List<H>? children;
   H({
     this.children,
@@ -17,9 +18,8 @@ class H {
   }
 
   Map<String, dynamic> toMap() {
-    return {
-      'children': children?.map((x) => x.toMap()).toList(),
-    };
+    print(id);
+    return {'children': children?.map((x) => x.toMap()).toList(), 'id': id};
   }
 
   factory H.fromMap(Map<String, dynamic> map) {

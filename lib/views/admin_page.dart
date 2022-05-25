@@ -15,6 +15,7 @@ import 'package:observer_client/views/testing_grounds.dart';
 
 import '../entities/global/subject.dart';
 import '../entities/user/user.dart';
+import 'hierarchy_page.dart';
 
 class AdminPage extends StatelessWidget {
   const AdminPage({Key? key}) : super(key: key);
@@ -22,22 +23,19 @@ class AdminPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     AuthModel auth = AuthModel.getInstance();
-    var isLogged = auth.isLogged();
 
     //Widget page = (await auth.isLogged())?
 
-    return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          primarySwatch: Colors.orange,
-        ),
-        home: const MyStatefulWidget());
+    return Scaffold(
+        body: MyStatefulWidget(
+      auth: auth,
+    ));
   }
 }
 
 class MyStatefulWidget extends StatefulWidget {
-  const MyStatefulWidget({Key? key}) : super(key: key);
+  MyStatefulWidget({Key? key, required this.auth}) : super(key: key);
+  AuthModel auth;
 
   @override
   State<MyStatefulWidget> createState() => _MyStatefulWidgetState();
@@ -98,13 +96,26 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget>
           IconButton(
             icon: const Icon(Icons.account_tree_rounded),
             tooltip: 'hierarchy',
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => HierarchyPage()),
+              );
+            },
           ),
         ],
         leading: IconButton(
           icon: const Icon(Icons.logout),
           tooltip: 'logout',
-          onPressed: () {},
+          onPressed: () async {
+            await widget.auth.logout(context);
+            widget.auth.isLogged();
+            Navigator.pop(context);
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => SignInPage()),
+            );
+          },
         ),
       ),
       body: Center(

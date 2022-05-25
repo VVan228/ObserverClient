@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:observer_client/views/admin_page.dart';
 
 import '../model/auth_model.dart';
-import '../presenters/interfaces/sign_in_presenter.dart';
 import '../presenters/sign_in_impl.dart';
 import 'interfaces/sign_in_view.dart';
 
 class SignInPage extends StatelessWidget {
   SignInPage({Key? key}) : super(key: key);
-
-  final SignInPresenter presenter = SignInImpl();
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +20,7 @@ class SignInPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Card(child: SignInForm(presenter)),
+                Card(child: SignInForm()),
                 Padding(
                     padding: const EdgeInsets.all(5.0),
                     child: Row(
@@ -38,8 +36,7 @@ class SignInPage extends StatelessWidget {
 }
 
 class SignInForm extends StatefulWidget {
-  final SignInPresenter presenter;
-  const SignInForm(this.presenter, {Key? key}) : super(key: key);
+  const SignInForm({Key? key}) : super(key: key);
 
   @override
   _SignInFormState createState() => _SignInFormState();
@@ -49,7 +46,7 @@ class _SignInFormState extends State<SignInForm> implements SignInView {
   AuthModel auth = AuthModel.getInstance();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-
+  SignInImpl presenter = SignInImpl();
   String _msg = "";
 
   void _changeMsg(String m) {
@@ -60,7 +57,7 @@ class _SignInFormState extends State<SignInForm> implements SignInView {
 
   @override
   void initState() {
-    widget.presenter.setView(this);
+    presenter.setView(this);
     super.initState();
   }
 
@@ -109,7 +106,7 @@ class _SignInFormState extends State<SignInForm> implements SignInView {
                 }),
               ),
               onPressed: () {
-                widget.presenter.submitClick(
+                presenter.submitClick(
                     _emailController.text, _passwordController.text);
               },
               child: const Text('Sign in'),
@@ -127,7 +124,11 @@ class _SignInFormState extends State<SignInForm> implements SignInView {
 
   @override
   void openAdminPage() {
-    // TODO: implement openAdminPage
+    print("well, i tried");
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const AdminPage()),
+    );
   }
 
   @override

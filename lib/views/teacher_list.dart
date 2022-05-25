@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:observer_client/entities/global/group.dart';
 import 'package:observer_client/entities/user/role.dart';
 import 'package:observer_client/model/users_model.dart';
 import 'package:observer_client/presenters/user_list_impl.dart';
@@ -95,5 +96,11 @@ class _StudentListState extends State<TeacherList> implements UserListView {
           }),
       constraints: const BoxConstraints(maxWidth: 500, minWidth: 200),
     ));
+  }
+
+  @override
+  Future<int?> getGroupId(List<Group> groups) {
+    // TODO: implement getGroupId
+    throw UnimplementedError();
   }
 }
