@@ -6,18 +6,18 @@ import 'package:observer_client/views/interfaces/student_list_view.dart';
 
 import '../entities/user/user.dart';
 
-class StudentList extends StatefulWidget {
-  final Role role = Role.STUDENT;
+class TeacherList extends StatefulWidget {
+  final Role role = Role.TEACHER;
 
-  const StudentList({Key? key}) : super(key: key);
+  const TeacherList({Key? key}) : super(key: key);
 
   //Role role = Role.STUDENT;
 
   @override
-  State<StudentList> createState() => _StudentListState();
+  State<TeacherList> createState() => _StudentListState();
 }
 
-class _StudentListState extends State<StudentList> implements UserListView {
+class _StudentListState extends State<TeacherList> implements UserListView {
   int _selectedIndex = 0;
   UserModel userModel = UserModel.getInstanse();
   static const TextStyle optionStyle =

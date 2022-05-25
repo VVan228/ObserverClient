@@ -54,7 +54,7 @@ class UserModel {
     if (user.role == Role.STUDENT) {
       stringPath = stringPath + "/student";
     } else if (user.role == Role.TEACHER) {
-      stringPath = stringPath + "/teachers";
+      stringPath = stringPath + "/teacher";
     } else {
       return null;
     }
@@ -71,10 +71,10 @@ class UserModel {
           "Content-Type": "application/json"
         },
         body: user.toJson());
-
     if (response.statusCode == 200) {
       return "";
     }
+    print(response.statusCode.toString() + " bodu");
     return null;
   }
 
