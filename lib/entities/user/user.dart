@@ -7,12 +7,13 @@ class User {
   String email;
   String name;
   int? id;
-  User({
-    required this.role,
-    required this.email,
-    required this.name,
-    this.id,
-  });
+  String? password;
+  User(
+      {required this.role,
+      required this.email,
+      required this.name,
+      this.id,
+      this.password});
 
   static Role getRoleByString(String role) {
     return Role.values.firstWhere((e) => e.name == (role));
@@ -34,6 +35,7 @@ class User {
 
   Map<String, dynamic> toMap() {
     return {
+      'password': password,
       'role': role.name,
       'email': email,
       'name': name,

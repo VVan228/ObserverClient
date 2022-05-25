@@ -7,10 +7,12 @@ import 'package:observer_client/entities/test/question.dart';
 import 'package:observer_client/entities/test/question_type.dart';
 import 'package:observer_client/entities/test/test.dart';
 import 'package:observer_client/entities/test/variant.dart';
+import 'package:observer_client/entities/testAnswer/scored_answer.dart';
 import 'package:observer_client/entities/user/role.dart';
 import 'package:observer_client/entities/user/user.dart';
 import 'package:observer_client/model/hierarchy_model.dart';
 import 'package:observer_client/model/subjects_model.dart';
+import 'package:observer_client/model/test_answers_model.dart';
 import 'package:observer_client/model/tests_model.dart';
 import 'package:observer_client/model/users_model.dart';
 
@@ -25,6 +27,7 @@ class TestingGrounds extends StatelessWidget {
   HierarchyModel hierarchyModel = HierarchyModel.getInstanse();
   SubjectsModel subjectsModel = SubjectsModel.getInstanse();
   TestsModel testsModel = TestsModel.getInstanse();
+  TestAnswersModel testAnswersModel = TestAnswersModel.getInstanse();
 
   TestCanvas tc = TestCanvas();
 
@@ -55,7 +58,23 @@ class TestingGrounds extends StatelessWidget {
               subjectId: 1,
               name: "another test");
           print(await testsModel.saveTest(test, [1]));*/
-          print(await testsModel.getTestsToCheck());
+          //Map<int, Answer> answers = {
+          //  1: Answer(closedAnswer: [
+          //    Variant(text: "var1 q1", id: 1),
+          //    Variant(text: "var2 q1", id: 2)
+          //  ]),
+          //  2: Answer(openAnswer: "aaaaa flutter text")
+          //};
+          //print(await testAnswersModel.getTestAnswersForUser(false));
+          //List<ScoredAnswer> scoredAnswers = [
+          //  ScoredAnswer(questionId: 2, score: 50, comment: "fluttter moment")
+          //];
+          //print(await testAnswersModel.setCheckAnswer(scoredAnswers, 1));
+          print(await userModel.saveUser(User(
+              role: Role.STUDENT,
+              email: "email",
+              name: "name",
+              password: "boba")));
         },
         child: const Icon(Icons.abc),
       ),

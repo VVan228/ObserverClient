@@ -3,12 +3,12 @@ import 'dart:convert';
 import '../test/answer.dart';
 
 class ScoredAnswer {
-  Answer answer;
+  Answer? answer;
   int questionId;
   int score;
   String comment;
   ScoredAnswer({
-    required this.answer,
+    this.answer,
     required this.questionId,
     required this.score,
     required this.comment,
@@ -30,7 +30,7 @@ class ScoredAnswer {
 
   Map<String, dynamic> toMap() {
     return {
-      'answer': answer.toMap(),
+      'answer': answer?.toMap(),
       'questionId': questionId,
       'score': score,
       'comment': comment,
@@ -39,7 +39,7 @@ class ScoredAnswer {
 
   factory ScoredAnswer.fromMap(Map<String, dynamic> map) {
     return ScoredAnswer(
-      answer: Answer.fromMap(map['answer']),
+      answer: map['answer'] != null ? Answer.fromMap(map['answer']) : null,
       questionId: map['questionId']?.toInt() ?? 0,
       score: map['score']?.toInt() ?? 0,
       comment: map['comment'] ?? '',

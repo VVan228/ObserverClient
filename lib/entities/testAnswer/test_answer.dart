@@ -1,72 +1,72 @@
 import 'dart:convert';
 
+import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
-
 import 'package:observer_client/entities/testAnswer/scored_answer.dart';
 import 'package:observer_client/entities/user/user.dart';
 
 import '../test/test.dart';
 
 class TestAnswer {
+  int id;
   int testId;
   List<ScoredAnswer> answers;
-  bool validated;
   User student;
   int totalScore;
   int maxScore;
-  DateTime date;
+  DateTime dateMillis;
   TestAnswer({
+    required this.id,
     required this.testId,
     required this.answers,
-    required this.validated,
     required this.student,
     required this.totalScore,
     required this.maxScore,
-    required this.date,
+    required this.dateMillis,
   });
 
   TestAnswer copyWith({
+    int? id,
     int? testId,
     List<ScoredAnswer>? answers,
-    bool? validated,
     User? student,
     int? totalScore,
     int? maxScore,
-    DateTime? date,
+    DateTime? dateMillis,
   }) {
     return TestAnswer(
+      id: id ?? this.id,
       testId: testId ?? this.testId,
       answers: answers ?? this.answers,
-      validated: validated ?? this.validated,
       student: student ?? this.student,
       totalScore: totalScore ?? this.totalScore,
       maxScore: maxScore ?? this.maxScore,
-      date: date ?? this.date,
+      dateMillis: dateMillis ?? this.dateMillis,
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
+      'id': id,
       'testId': testId,
       'answers': answers.map((x) => x.toMap()).toList(),
-      'validated': validated,
       'student': student.toMap(),
       'totalScore': totalScore,
       'maxScore': maxScore,
-      'date': date.millisecondsSinceEpoch,
+      'dateMillis': dateMillis.millisecondsSinceEpoch,
     };
   }
 
   factory TestAnswer.fromMap(Map<String, dynamic> map) {
     return TestAnswer(
+      id: map['id']?.toInt() ?? 0,
       testId: map['testId']?.toInt() ?? 0,
       answers: List<ScoredAnswer>.from(
           map['answers']?.map((x) => ScoredAnswer.fromMap(x))),
-      validated: map['validated'] ?? false,
       student: User.fromMap(map['student']),
       totalScore: map['totalScore']?.toInt() ?? 0,
       maxScore: map['maxScore']?.toInt() ?? 0,
-      date: DateTime.fromMillisecondsSinceEpoch(map['date']),
+      dateMillis: DateTime.fromMillisecondsSinceEpoch(map['dateMillis']),
     );
   }
 
@@ -77,31 +77,32 @@ class TestAnswer {
 
   @override
   String toString() {
-    return 'TestAnswer(testId: $testId, answers: $answers, validated: $validated, student: $student, totalScore: $totalScore, maxScore: $maxScore, date: $date)';
+    return 'TestAnswer(id: $id, testId: $testId, answers: $answers, student: $student, totalScore: $totalScore, maxScore: $maxScore, dateMillis: $dateMillis)';
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
+    final listEquals = const DeepCollectionEquality().equals;
 
     return other is TestAnswer &&
+        other.id == id &&
         other.testId == testId &&
         listEquals(other.answers, answers) &&
-        other.validated == validated &&
         other.student == student &&
         other.totalScore == totalScore &&
         other.maxScore == maxScore &&
-        other.date == date;
+        other.dateMillis == dateMillis;
   }
 
   @override
   int get hashCode {
-    return testId.hashCode ^
+    return id.hashCode ^
+        testId.hashCode ^
         answers.hashCode ^
-        validated.hashCode ^
         student.hashCode ^
         totalScore.hashCode ^
         maxScore.hashCode ^
-        date.hashCode;
+        dateMillis.hashCode;
   }
 }

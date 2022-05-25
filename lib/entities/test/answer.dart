@@ -5,18 +5,22 @@ import 'package:flutter/foundation.dart';
 import 'package:observer_client/entities/test/variant.dart';
 
 class Answer {
+  int? id;
   List<Variant>? closedAnswer;
   String? openAnswer = "";
   Answer({
+    this.id,
     this.closedAnswer,
     this.openAnswer,
   });
 
   Answer copyWith({
+    int? id,
     List<Variant>? closedAnswer,
     String? openAnswer,
   }) {
     return Answer(
+      id: id ?? this.id,
       closedAnswer: closedAnswer ?? this.closedAnswer,
       openAnswer: openAnswer ?? this.openAnswer,
     );
@@ -24,6 +28,7 @@ class Answer {
 
   Map<String, dynamic> toMap() {
     return {
+      'id': id,
       'closedAnswer': closedAnswer?.map((x) => x.toMap()).toList(),
       'openAnswer': openAnswer,
     };
@@ -31,6 +36,7 @@ class Answer {
 
   factory Answer.fromMap(Map<String, dynamic> map) {
     return Answer(
+      id: map['id']?.toInt(),
       closedAnswer: map['closedAnswer'] != null
           ? List<Variant>.from(
               map['closedAnswer']?.map((x) => Variant.fromMap(x)))
@@ -45,7 +51,7 @@ class Answer {
 
   @override
   String toString() =>
-      'Answer(closedAnswer: $closedAnswer, openAnswer: $openAnswer)';
+      'Answer(id: $id, closedAnswer: $closedAnswer, openAnswer: $openAnswer)';
 
   @override
   bool operator ==(Object other) {
@@ -53,10 +59,11 @@ class Answer {
     final listEquals = const DeepCollectionEquality().equals;
 
     return other is Answer &&
+        other.id == id &&
         listEquals(other.closedAnswer, closedAnswer) &&
         other.openAnswer == openAnswer;
   }
 
   @override
-  int get hashCode => closedAnswer.hashCode ^ openAnswer.hashCode;
+  int get hashCode => id.hashCode ^ closedAnswer.hashCode ^ openAnswer.hashCode;
 }

@@ -111,4 +111,29 @@ class TestsModel {
     List<Test> testsListMapped = testsList.map((e) => Test.fromMap(e)).toList();
     return testsListMapped;
   }
+
+  Future<List<Test>?> getNotAnsweredTests() async {
+    String stringPath = globalPath + "/tests/get/notAnswered";
+
+    var path = Uri.parse(stringPath);
+
+    String accessToken = await authImpl.getAccessToken() ?? "";
+
+    if (accessToken.isEmpty) {
+      return null;
+    }
+
+    var response =
+        await http.get(path, headers: {"Authorization": accessToken});
+
+    if (response.statusCode != 200) {
+      return null;
+    }
+
+    Map<String, dynamic> bodyMap = json.decode(response.body);
+    //print(bodyMap['content']);
+    List<dynamic> testsList = bodyMap['content'];
+    List<Test> testsListMapped = testsList.map((e) => Test.fromMap(e)).toList();
+    return testsListMapped;
+  }
 }

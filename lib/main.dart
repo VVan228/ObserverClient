@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:observer_client/model/auth_model.dart';
+import 'package:observer_client/views/admin_page.dart';
 import 'package:observer_client/views/sign_in_page.dart';
 import 'package:observer_client/views/testing_grounds.dart';
 
@@ -30,7 +31,7 @@ class MyApp extends StatelessWidget {
           if (snapshot.hasData) {
             bool? res = snapshot.data;
             if (res != null && res) {
-              return TestingGrounds();
+              return const AdminPage();
             } else {
               return SignInPage();
             }
