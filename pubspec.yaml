@@ -39,6 +39,7 @@ dependencies:
   jwt_decoder: ^2.0.1
   graphview: ^1.1.1
   multi_select_flutter: ^4.1.2
+  dotted_border: ^2.0.0+2
 
 dev_dependencies:
   flutter_test:

@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:observer_client/entities/global/group.dart';
+import 'package:observer_client/entities/test/question.dart';
 import 'package:observer_client/presenters/create_test_impl.dart';
 import 'package:observer_client/views/interfaces/create_test_view.dart';
+
+import 'add_question_page.dart';
 
 class CreateTestPage extends StatefulWidget {
   CreateTestPage({Key? key}) : super(key: key);
@@ -19,6 +22,8 @@ class _CreateTestPageState extends State<CreateTestPage>
   List<Group> groups = [];
   List<Group> selectedGroups = [];
   List<MultiSelectItem<Group>> groupsSelect = [];
+
+  List<Question>? questions = [];
 
   @override
   void initState() {
@@ -83,7 +88,13 @@ class _CreateTestPageState extends State<CreateTestPage>
                       padding: const EdgeInsets.all(8.0),
                       child: SizedBox(
                         child: TextButton(
-                          onPressed: () {},
+                          onPressed: () async {
+                            questions = await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => AddQuestionsPage()),
+                            );
+                          },
                           child: const Text("добавить вопросы"),
                         ),
                         width: 350,
