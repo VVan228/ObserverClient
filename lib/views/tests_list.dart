@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:observer_client/entities/test/test.dart';
 import 'package:observer_client/presenters/tests_list_impl.dart';
+import 'package:observer_client/views/create_test_answer.dart';
 import 'package:observer_client/views/interfaces/tests_list_view.dart';
 
 class TestsList extends StatefulWidget {
@@ -51,13 +52,13 @@ class _StudentListState extends State<TestsList> implements TestsListView {
             int testId = tests[index].id ?? 1;
             return GestureDetector(
               onTap: () {
-                /*Navigator.push(
+                Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => AddTeacherPage(
-                            subjectId: subjectId,
+                      builder: (context) => CreateTestAnswer(
+                            test: tests[index],
                           )),
-                );*/
+                );
               },
               child: Card(
                 child: Padding(

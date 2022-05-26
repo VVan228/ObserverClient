@@ -13,8 +13,10 @@ class Question {
   QuestionType questionType;
   int scoreScale;
   String questionText;
+  int? id;
   Question(
-      {this.variants,
+      {this.id,
+      this.variants,
       this.rightAnswer,
       required this.scoreScale,
       required this.questionText,
@@ -32,6 +34,7 @@ class Question {
 
   factory Question.fromMap(Map<String, dynamic> map) {
     return Question(
+        id: map['id'],
         variants: map['variants'] != null
             ? List<Variant>.from(
                 map['variants']?.map((x) => Variant.fromMap(x)))

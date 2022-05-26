@@ -15,7 +15,9 @@ class TestAnswer {
   int totalScore;
   int maxScore;
   DateTime dateMillis;
+  bool? validated;
   TestAnswer({
+    this.validated,
     required this.id,
     required this.testId,
     required this.answers,
@@ -59,6 +61,7 @@ class TestAnswer {
 
   factory TestAnswer.fromMap(Map<String, dynamic> map) {
     return TestAnswer(
+      validated: map['validated'],
       id: map['id']?.toInt() ?? 0,
       testId: map['testId']?.toInt() ?? 0,
       answers: List<ScoredAnswer>.from(
