@@ -5,6 +5,7 @@ import 'package:observer_client/entities/user/user.dart';
 import 'package:observer_client/model/auth_model.dart';
 import 'package:observer_client/presenters/teacher_page_impl.dart';
 import 'package:observer_client/views/interfaces/teacher_view.dart';
+import 'package:observer_client/views/set_check_answer.dart';
 import 'package:observer_client/views/sign_in_page.dart';
 
 import '../entities/user/role.dart';
@@ -81,13 +82,14 @@ class _CheckAnswerListState extends State<CheckAnswerList>
                   String name = tests[index].student.name;
                   return GestureDetector(
                     onTap: () {
-                      //Navigator.push(
-                      //  context,
-                      //  MaterialPageRoute(
-                      //      builder: (context) => AddTeacherPage(
-                      //            subjectId: subjectId,
-                      //          )),
-                      //);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => SetCheckAnswer(
+                                  test: widget.test,
+                                  testAnswer: tests[index],
+                                )),
+                      );
                     },
                     child: Card(
                       child: Padding(
