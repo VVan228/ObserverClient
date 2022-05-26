@@ -23,7 +23,8 @@ class _CreateTestPageState extends State<CreateTestPage>
   List<Group> selectedGroups = [];
   List<MultiSelectItem<Group>> groupsSelect = [];
 
-  List<Question>? questions = [];
+  List<Question>? questions;
+  int qLen = 0;
 
   @override
   void initState() {
@@ -87,15 +88,24 @@ class _CreateTestPageState extends State<CreateTestPage>
                   Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: SizedBox(
-                        child: TextButton(
-                          onPressed: () async {
-                            questions = await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => AddQuestionsPage()),
-                            );
-                          },
-                          child: const Text("добавить вопросы"),
+                        child: Column(
+                          children: [
+                            TextButton(
+                              onPressed: () async {
+                                questions = await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => AddQuestionsPage()),
+                                );
+                                setState(() {
+                                  qLen = questions?.length ?? 0;
+                                  //print(questions);
+                                });
+                              },
+                              child: Text(
+                                  "добавить вопросы (" + qLen.toString() + ")"),
+                            ),
+                          ],
                         ),
                         width: 350,
                       )),

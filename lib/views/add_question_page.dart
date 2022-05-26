@@ -36,6 +36,7 @@ class _CreateTestPageState extends State<AddQuestionsPage> {
                   icon: const Icon(Icons.save),
                   onPressed: () {
                     //print(adapter.getQuestions());
+                    //print(adapter.getQuestions());
                     Navigator.pop(context, adapter.getQuestions());
                     //presenter.addPeopleClick();
                   },
@@ -212,8 +213,8 @@ class _AdapterState extends State<Adapter> {
                                   onChanged: (value) {
                                     widget._data[index].variants?[index2].text =
                                         value;
-                                    print(widget._data[index].variants ??
-                                        "no vars" + index2.toString());
+                                    //print(widget._data[index].variants ??
+                                    //"no vars" + index2.toString());
                                   },
                                   controller: _answerController,
                                   decoration: const InputDecoration(
