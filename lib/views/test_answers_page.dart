@@ -19,6 +19,7 @@ class TestAnswersList extends StatefulWidget {
 class _StudentListState extends State<TestAnswersList>
     implements TestAnswersListView {
   List<TestAnswer?> tests = [null];
+  List<Test?> testsNames = [null];
 
   bool validated = true;
 
@@ -57,8 +58,13 @@ class _StudentListState extends State<TestAnswersList>
                   },
                 );
               }
-              ;
               int testId = tests[index]!.testId;
+              String testName = testsNames[index]!.name;
+              int score = tests[index]?.totalScore ?? 0;
+              int maxScore = tests[index]?.maxScore ?? 0;
+
+              Color C = validated ? Colors.green : Colors.red;
+
               return GestureDetector(
                 onTap: () {
                   /*Navigator.push(
@@ -67,19 +73,34 @@ class _StudentListState extends State<TestAnswersList>
                         builder: (context) => CreateTestAnswer(
                               test: tests[index],
                             )),
-                  );*/
+                  );
+                  */
                 },
                 child: Card(
                   child: Padding(
                     padding: EdgeInsets.all(15),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          testId.toString(),
+                          testName,
                           style: Theme.of(context).textTheme.headline6,
                         ),
+                        Row(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(right: 10),
+                              child: Text(
+                                  score.toString() + "/" + maxScore.toString()),
+                            ),
+                            Container(
+                              width: 10,
+                              height: 10,
+                              decoration: BoxDecoration(
+                                  color: C, shape: BoxShape.circle),
+                            ),
+                          ],
+                        )
                       ],
                     ),
                   ),
@@ -108,5 +129,15 @@ class _StudentListState extends State<TestAnswersList>
     setState(() {
       tests = [null];
     });
+  }
+
+  @override
+  void addTest(Test test) {
+    testsNames.insert(0, test);
+  }
+
+  @override
+  void removeAllTests() {
+    testsNames = [null];
   }
 }

@@ -15,6 +15,7 @@ import '../views/interfaces/student_list_view.dart';
 class TestAnswersListImpl {
   TestAnswersListView? _view;
   TestAnswersModel testsModel = TestAnswersModel.getInstanse();
+  TestsModel testsModel2 = TestsModel.getInstanse();
   HierarchyModel hierarchyModel = HierarchyModel.getInstanse();
 
   Future<void> setView(TestAnswersListView view) async {
@@ -31,13 +32,17 @@ class TestAnswersListImpl {
 
   void loadTests() async {
     _view?.removeAllTestAnswers();
+    _view?.removeAllTests();
     List<TestAnswer>? tests =
         await testsModel.getTestAnswersForUser(_view?.getValidated() ?? true);
     if (tests == null) {
       return;
     }
-    tests.forEach((element) {
+    tests.forEach((element) async {
+      Test? t = await testsModel2.getTest(element.testId);
       _view?.addTestAnswer(element);
+      _view?.addTest(t ??
+          Test(timeLimit: 0, questions: [], subjectId: 1, name: "empty name"));
     });
   }
 }
