@@ -3,6 +3,7 @@ import 'package:observer_client/entities/test/test.dart';
 import 'package:observer_client/model/auth_model.dart';
 import 'package:observer_client/presenters/teacher_page_impl.dart';
 import 'package:observer_client/views/check_answer_list.dart';
+import 'package:observer_client/views/create_test_page.dart';
 import 'package:observer_client/views/interfaces/teacher_view.dart';
 import 'package:observer_client/views/sign_in_page.dart';
 
@@ -83,7 +84,12 @@ class _TeacherPageState extends State<TeacherPage> implements TeacherView {
           ],
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => CreateTestPage()),
+            );
+          },
           child: const Icon(Icons.add),
         ),
         body: Center(
