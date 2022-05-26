@@ -8,18 +8,19 @@ import 'package:observer_client/entities/user/user.dart';
 import '../global/subject.dart';
 
 class Test {
+  int? id;
   int timeLimit;
   List<Question> questions;
   int subjectId;
   String name;
   User? creator;
-  Test({
-    required this.timeLimit,
-    required this.questions,
-    required this.subjectId,
-    required this.name,
-    this.creator,
-  });
+  Test(
+      {required this.timeLimit,
+      required this.questions,
+      required this.subjectId,
+      required this.name,
+      this.creator,
+      this.id});
 
   Test copyWith({
     int? timeLimit,
@@ -49,13 +50,13 @@ class Test {
 
   factory Test.fromMap(Map<String, dynamic> map) {
     return Test(
-      timeLimit: map['timeLimit']?.toInt() ?? 0,
-      questions: List<Question>.from(
-          map['questions']?.map((x) => Question.fromMap(x))),
-      subjectId: map['subjectId']?.toInt() ?? 0,
-      name: map['name'] ?? '',
-      creator: map['creator'] != null ? User.fromMap(map['creator']) : null,
-    );
+        timeLimit: map['timeLimit']?.toInt() ?? 0,
+        questions: List<Question>.from(
+            map['questions']?.map((x) => Question.fromMap(x))),
+        subjectId: map['subjectId']?.toInt() ?? 0,
+        name: map['name'] ?? '',
+        creator: map['creator'] != null ? User.fromMap(map['creator']) : null,
+        id: map['id'] ?? 0);
   }
 
   String toJson() => json.encode(toMap());

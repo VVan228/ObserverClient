@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:observer_client/views/admin_page.dart';
+import 'package:observer_client/views/teacher_page.dart';
 
 import '../model/auth_model.dart';
 import '../presenters/sign_in_impl.dart';
@@ -124,11 +125,11 @@ class _SignInFormState extends State<SignInForm> implements SignInView {
 
   @override
   void openAdminPage() {
-    print("well, i tried");
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => const AdminPage()),
     );
+    //Navigator.pop(context);
   }
 
   @override
@@ -138,6 +139,10 @@ class _SignInFormState extends State<SignInForm> implements SignInView {
 
   @override
   void openTeacherPage() {
-    // TODO: implement openTeacherPage
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => TeacherPage()),
+    );
+    //Navigator.pop(context);
   }
 }

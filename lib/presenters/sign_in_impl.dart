@@ -27,7 +27,7 @@ class SignInImpl {
           // TODO: Handle this case.
           break;
         case Role.TEACHER:
-          // TODO: Handle this case.
+          _view?.openTeacherPage();
           break;
         case null:
           {
