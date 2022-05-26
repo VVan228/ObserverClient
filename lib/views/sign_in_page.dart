@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:observer_client/views/admin_page.dart';
+import 'package:observer_client/views/student_page.dart';
 import 'package:observer_client/views/teacher_page.dart';
 
 import '../model/auth_model.dart';
@@ -134,7 +135,10 @@ class _SignInFormState extends State<SignInForm> implements SignInView {
 
   @override
   void openStudentPage() {
-    // TODO: implement openStudentPage
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => StudentPage()),
+    );
   }
 
   @override

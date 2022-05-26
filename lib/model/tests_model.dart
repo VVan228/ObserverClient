@@ -129,10 +129,10 @@ class TestsModel {
     if (response.statusCode != 200) {
       return null;
     }
+    //print(response.body);
+    //Map<String, dynamic> bodyMap = json.decode(response.body);
 
-    Map<String, dynamic> bodyMap = json.decode(response.body);
-    //print(bodyMap['content']);
-    List<dynamic> testsList = bodyMap['content'];
+    List<dynamic> testsList = json.decode(response.body);
     List<Test> testsListMapped = testsList.map((e) => Test.fromMap(e)).toList();
     return testsListMapped;
   }

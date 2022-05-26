@@ -24,7 +24,7 @@ class SignInImpl {
             break;
           }
         case Role.STUDENT:
-          // TODO: Handle this case.
+          _view?.openStudentPage();
           break;
         case Role.TEACHER:
           _view?.openTeacherPage();

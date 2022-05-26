@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:observer_client/model/auth_model.dart';
 import 'package:observer_client/views/admin_page.dart';
 import 'package:observer_client/views/sign_in_page.dart';
+import 'package:observer_client/views/student_page.dart';
 import 'package:observer_client/views/teacher_page.dart';
 import 'package:observer_client/views/testing_grounds.dart';
 
@@ -42,6 +43,8 @@ class StateCheck extends StatelessWidget {
             return const AdminPage();
           } else if (res != null && res == Role.TEACHER) {
             return TeacherPage();
+          } else if (res != null && res == Role.STUDENT) {
+            return StudentPage();
           } else {
             return SignInPage();
           }
