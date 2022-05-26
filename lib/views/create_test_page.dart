@@ -123,7 +123,9 @@ class _CreateTestPageState extends State<CreateTestPage>
                         }),
                       ),
                       onPressed: () {
-                        widget.presenter.submitClick();
+                        widget.presenter.submitClick(questions ?? [],
+                            selectedGroups, nameController.text);
+                        Navigator.pop(context);
                       },
                       child: const Text('submit'),
                     ),

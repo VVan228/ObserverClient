@@ -1,7 +1,11 @@
+import 'dart:convert';
+
+import 'package:observer_client/entities/test/test.dart';
 import 'package:observer_client/model/tests_model.dart';
 import 'package:observer_client/views/interfaces/create_test_view.dart';
 
 import '../entities/global/group.dart';
+import '../entities/test/question.dart';
 import '../model/hierarchy_model.dart';
 import '../model/users_model.dart';
 
@@ -21,5 +25,11 @@ class CreateTestImpl {
     _view?.setGroups(groups ?? []);
   }
 
-  void submitClick() {}
+  void submitClick(List<Question> questions, List<Group> groups, String name) {
+    List<int> groupIds = groups.map((e) => e.id).toList();
+    Test test =
+        Test(timeLimit: 0, questions: questions, subjectId: 1, name: name);
+    //var requestBody = json.encode({"access": groupIds, "test": test.toMap()});
+    testsModel.saveTest(test, groupIds);
+  }
 }
