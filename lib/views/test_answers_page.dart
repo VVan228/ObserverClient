@@ -6,6 +6,7 @@ import 'package:observer_client/presenters/tests_list_impl.dart';
 import 'package:observer_client/views/create_test_answer.dart';
 import 'package:observer_client/views/interfaces/test_answers_view.dart';
 import 'package:observer_client/views/interfaces/tests_list_view.dart';
+import 'package:observer_client/views/test_answer_page.dart';
 
 class TestAnswersList extends StatefulWidget {
   TestAnswersList({Key? key}) : super(key: key);
@@ -67,14 +68,17 @@ class _StudentListState extends State<TestAnswersList>
 
               return GestureDetector(
                 onTap: () {
-                  /*Navigator.push(
+                  if (!validated) {
+                    return;
+                  }
+                  Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => CreateTestAnswer(
-                              test: tests[index],
+                        builder: (context) => TestAnswerPage(
+                              test: testsNames[index]!,
+                              answer: tests[index]!,
                             )),
                   );
-                  */
                 },
                 child: Card(
                   child: Padding(
