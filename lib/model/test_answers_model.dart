@@ -54,7 +54,6 @@ class TestAnswersModel {
     String stringPath = globalPath +
         "/testAnswers/get/byStudent?validated=" +
         validated.toString();
-    print(stringPath);
     var path = Uri.parse(stringPath);
 
     String accessToken = await authImpl.getAccessToken() ?? "";

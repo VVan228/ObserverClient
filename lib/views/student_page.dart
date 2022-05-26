@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:observer_client/views/sign_in_page.dart';
+import 'package:observer_client/views/test_answers_page.dart';
 import 'package:observer_client/views/tests_list.dart';
 
 import '../model/auth_model.dart';
@@ -16,7 +17,7 @@ class StudentPage extends StatefulWidget {
 class _MyStatefulWidgetState extends State<StudentPage> {
   static List<Widget> _widgetOptions = <Widget>[
     TestsList(),
-    Text("data2"),
+    TestAnswersList(),
   ];
   int selectedIndex = 0;
   void _onItemTapped(int index) {
