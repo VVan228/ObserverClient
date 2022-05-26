@@ -1,22 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:observer_client/entities/test/test.dart';
+import 'package:observer_client/entities/testAnswer/test_answer.dart';
+import 'package:observer_client/entities/user/user.dart';
 import 'package:observer_client/model/auth_model.dart';
 import 'package:observer_client/presenters/teacher_page_impl.dart';
-import 'package:observer_client/views/check_answer_list.dart';
 import 'package:observer_client/views/interfaces/teacher_view.dart';
 import 'package:observer_client/views/sign_in_page.dart';
 
-class TeacherPage extends StatefulWidget {
-  TeacherPage({Key? key}) : super(key: key);
+import '../entities/user/role.dart';
+import '../presenters/check_answer_list_impl.dart';
+import 'interfaces/check_answer_list_view.dart';
 
-  TeacherPageImpl presenter = TeacherPageImpl();
+class CheckAnswerList extends StatefulWidget {
+  CheckAnswerList({Key? key, required this.test}) : super(key: key);
+
+  CheckAnswerListImpl presenter = CheckAnswerListImpl();
   AuthModel auth = AuthModel.getInstance();
+  Test test;
 
   @override
-  State<TeacherPage> createState() => _TeacherPageState();
+  State<CheckAnswerList> createState() => _CheckAnswerListState();
 }
 
-class _TeacherPageState extends State<TeacherPage> implements TeacherView {
+class _CheckAnswerListState extends State<CheckAnswerList>
+    implements CheckAnswerListView {
   @override
   void initState() {
     widget.presenter.setView(this);
@@ -24,10 +31,16 @@ class _TeacherPageState extends State<TeacherPage> implements TeacherView {
     super.initState();
   }
 
-  List<Test> tests = [
-    Test(timeLimit: 0, questions: [], subjectId: 0, name: "")
+  List<TestAnswer> tests = [
+    TestAnswer(
+        id: 0,
+        testId: 0,
+        answers: [],
+        student: User(role: Role.STUDENT, email: "", name: ""),
+        totalScore: 0,
+        maxScore: 0,
+        dateMillis: DateTime(1))
   ];
-  bool autoCheck = false;
 
   Color getColor(Set<MaterialState> states) {
     const Set<MaterialState> interactiveStates = <MaterialState>{
@@ -45,42 +58,7 @@ class _TeacherPageState extends State<TeacherPage> implements TeacherView {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text("Тесты"),
-          leading: IconButton(
-            icon: const Icon(Icons.logout),
-            onPressed: () async {
-              await widget.auth.logout(context);
-              widget.auth.isLogged();
-              Navigator.pop(context);
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => SignInPage()),
-              );
-            },
-          ),
-          actions: [
-            Container(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: Row(
-                  children: [
-                    const Text("autoCheck"),
-                    Checkbox(
-                      checkColor: Colors.white,
-                      value: autoCheck,
-                      onChanged: (bool? value) {
-                        setState(() {
-                          autoCheck = value!;
-                        });
-                        widget.presenter.update();
-                      },
-                    ),
-                  ],
-                ),
-              ),
-              color: Colors.white,
-            )
-          ],
+          title: Text("Неоцененные ответы на тест " + widget.test.name),
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {},
@@ -100,19 +78,9 @@ class _TeacherPageState extends State<TeacherPage> implements TeacherView {
                       },
                     );
                   }
-                  String name = tests[index].name;
-                  int testId = tests[index].id ?? 1;
+                  String name = tests[index].student.name;
                   return GestureDetector(
                     onTap: () {
-                      if (!autoCheck) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => CheckAnswerList(
-                                    test: tests[index],
-                                  )),
-                        );
-                      }
                       //Navigator.push(
                       //  context,
                       //  MaterialPageRoute(
@@ -123,7 +91,7 @@ class _TeacherPageState extends State<TeacherPage> implements TeacherView {
                     },
                     child: Card(
                       child: Padding(
-                        padding: EdgeInsets.all(15),
+                        padding: const EdgeInsets.all(15),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.start,
@@ -144,21 +112,30 @@ class _TeacherPageState extends State<TeacherPage> implements TeacherView {
   }
 
   @override
-  void addTest(Test test) {
+  void addTestAnswer(TestAnswer test) {
     setState(() {
       tests.insert(0, test);
     });
   }
 
   @override
-  void removeAllTests() {
+  void removeAllTestAnswers() {
     setState(() {
-      tests = [Test(timeLimit: 0, questions: [], subjectId: 0, name: "")];
+      tests = [
+        TestAnswer(
+            id: 0,
+            testId: 0,
+            answers: [],
+            student: User(role: Role.STUDENT, email: "", name: ""),
+            totalScore: 0,
+            maxScore: 0,
+            dateMillis: DateTime(1))
+      ];
     });
   }
 
   @override
-  bool getAutoCheck() {
-    return autoCheck;
+  int getId() {
+    return widget.test.id ?? 0;
   }
 }
