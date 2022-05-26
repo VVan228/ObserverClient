@@ -28,7 +28,7 @@ class _TeacherPageState extends State<TeacherPage> implements TeacherView {
   List<Test> tests = [
     Test(timeLimit: 0, questions: [], subjectId: 0, name: "")
   ];
-  bool autoCheck = false;
+  bool notAutoCheck = false;
 
   Color getColor(Set<MaterialState> states) {
     const Set<MaterialState> interactiveStates = <MaterialState>{
@@ -65,13 +65,13 @@ class _TeacherPageState extends State<TeacherPage> implements TeacherView {
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: Row(
                   children: [
-                    const Text("autoCheck"),
+                    const Text("notAutoCheck"),
                     Checkbox(
                       checkColor: Colors.white,
-                      value: autoCheck,
+                      value: notAutoCheck,
                       onChanged: (bool? value) {
                         setState(() {
-                          autoCheck = value!;
+                          notAutoCheck = value!;
                         });
                         widget.presenter.update();
                       },
@@ -110,7 +110,7 @@ class _TeacherPageState extends State<TeacherPage> implements TeacherView {
                   int testId = tests[index].id ?? 1;
                   return GestureDetector(
                     onTap: () {
-                      if (!autoCheck) {
+                      if (notAutoCheck) {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -165,6 +165,6 @@ class _TeacherPageState extends State<TeacherPage> implements TeacherView {
 
   @override
   bool getAutoCheck() {
-    return autoCheck;
+    return notAutoCheck;
   }
 }
