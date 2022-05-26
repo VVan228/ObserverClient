@@ -52,7 +52,6 @@ class HierarchyModel {
 
     var response =
         await http.get(path, headers: {"Authorization": accessToken});
-
     if (response.statusCode == 200) {
       List<dynamic> dynamicGroups = json.decode(response.body);
       List<Group> res = dynamicGroups.map((e) => Group.fromMap(e)).toList();
@@ -84,7 +83,7 @@ class HierarchyModel {
     return response.body;
   }
 
-  Future<String?> saveHierarchy(H root) async {
+  Future<String?> saveHierarchy(Map<String, dynamic> root) async {
     String stringPath = globalPath + "/hierarchy/save";
     var path = Uri.parse(stringPath);
 
@@ -98,7 +97,29 @@ class HierarchyModel {
           "Authorization": accessToken,
           "Content-Type": "application/json"
         },
-        body: root.toJson());
+        body: json.encode(root));
+
+    if (response.statusCode == 200) {
+      return "";
+    }
+    return response.body;
+  }
+
+  Future<String?> saveLabels(List<String> labels) async {
+    String stringPath = globalPath + "/hierarchy/update/setLabels";
+    var path = Uri.parse(stringPath);
+
+    String accessToken = await authImpl.getAccessToken() ?? "";
+
+    if (accessToken.isEmpty) {
+      return null;
+    }
+    var response = await http.post(path,
+        headers: {
+          "Authorization": accessToken,
+          "Content-Type": "application/json"
+        },
+        body: json.encode(labels));
 
     if (response.statusCode == 200) {
       return "";

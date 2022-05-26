@@ -12,4 +12,12 @@ class HierarchyImpl {
   void addClicked() {
     _view?.getNewNode();
   }
+
+  void submitClick() {
+    var tree = _view?.getTree();
+    var legend = _view?.getTreeLegend();
+    hierarchyModel.saveLabels(legend!);
+    hierarchyModel.saveHierarchy(tree!);
+    _view?.back();
+  }
 }

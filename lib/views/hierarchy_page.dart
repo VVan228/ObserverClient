@@ -25,21 +25,52 @@ class _StudentListState extends State<HierarchyPage> implements HierarchyView {
   Map<int, String> names = {};
   int nextId = 1;
   int maxLvl = 1;
+  List<TextEditingController> controllers = [];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(),
+        appBar: AppBar(
+          actions: [
+            IconButton(
+                onPressed: () {
+                  presenter.submitClick();
+                },
+                icon: const Icon(Icons.save))
+          ],
+        ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             presenter.addClicked();
           },
           child: Icon(Icons.add),
         ),
-        body: Column(
+        body: Row(
           mainAxisSize: MainAxisSize.max,
           children: [
             Expanded(
+              flex: 5,
+              child: Center(
+                  child: SizedBox(
+                      width: 250,
+                      child: Padding(
+                          child: ListView.builder(
+                              itemCount: controllers.length,
+                              itemBuilder: (context, index) {
+                                return Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 10),
+                                  child: TextFormField(
+                                    controller: controllers[index],
+                                    decoration: InputDecoration(
+                                        hintText: ("название уровня " +
+                                            (index + 1).toString())),
+                                  ),
+                                );
+                              }),
+                          padding: EdgeInsets.only(top: 75)))),
+            ),
+            Expanded(
+              flex: 5,
               child: InteractiveViewer(
                   constrained: false,
                   boundaryMargin: EdgeInsets.all(100),
@@ -75,7 +106,7 @@ class _StudentListState extends State<HierarchyPage> implements HierarchyView {
             BoxShadow(color: Colors.orange, spreadRadius: 1),
           ],
         ),
-        child: Text('Node $a'));
+        child: Text('${names[a]}'));
   }
 
   final Graph graph = Graph()..isTree = true;
@@ -119,6 +150,9 @@ class _StudentListState extends State<HierarchyPage> implements HierarchyView {
       }
     });
 
+    if (res == null) {
+      return null;
+    }
     setState(() {
       names[nextId] = res?["name"].toString() ?? '';
       int chosenLvl = res?["lvl"] ?? 0;
@@ -138,15 +172,53 @@ class _StudentListState extends State<HierarchyPage> implements HierarchyView {
           h.children?.add(newNode);
         }
       }
-      print("tree:" + tree.toJson());
-      print("names:" + names.toString());
+      //print("tree:" + tree.toJson());
+      //print("names:" + names.toString());
 
       nextId++;
       if (chosenLvl >= maxLvl) {
+        controllers.add(TextEditingController());
         maxLvl++;
       }
     });
 
     return res;
+  }
+
+  @override
+  List<String> getTreeLegend() {
+    return controllers.map((e) => e.text).toList();
+  }
+
+  @override
+  Map<String, dynamic> getTree() {
+    Map<String, dynamic> res = {};
+    if (tree.children == null) {
+      res["children"] = null;
+      return res;
+    }
+    res["children"] = [];
+    tree.children?.forEach((element) {
+      res["children"].add(getTreeIter(element));
+    });
+    return res;
+  }
+
+  getTreeIter(H ch) {
+    Map<String, dynamic> res = {"name": names[ch.id]};
+    if (ch.children == null) {
+      res["children"] = null;
+      return res;
+    }
+    res["children"] = [];
+    ch.children?.forEach((element) {
+      res["children"].add(getTreeIter(element));
+    });
+    return res;
+  }
+
+  @override
+  void back() {
+    Navigator.pop(context);
   }
 }

@@ -55,62 +55,64 @@ class _MyStatefulWidgetState extends State<AddNodePage> {
     final _nameController = TextEditingController();
 
     return Scaffold(
+        appBar: AppBar(),
         body: Center(
-      child: SizedBox(
-        width: 500,
-        height: 500,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            DropdownButton<int>(
-                hint: const Text("Выберите уровень"),
-                items: lvls
-                    .map((e) => DropdownMenuItem<int>(
-                        value: e, child: Text(e.toString())))
-                    .toList(),
-                value: chosenLvl,
-                onChanged: (int? value) {
-                  if (value != null) {
-                    setState(() {
-                      //aaprint(value);
-                      chosenLvl = value;
-                      //parents.add(1);
-                      parents = getLvl(value - 1);
-                      chosenParent = parents[0];
-                    });
-                  }
-                }),
-            DropdownButton<int>(
-                hint: const Text("Выберите родителя"),
-                value: chosenParent,
-                items: parents
-                    .map((e) => DropdownMenuItem<int>(
-                        value: e, child: Text(widget.names[e] ?? '')))
-                    .toList(),
-                onChanged: (int? value) {
-                  if (value != null) {
-                    setState(() {
-                      chosenParent = value;
-                    });
-                  }
-                }),
-            TextFormField(
-              controller: _nameController,
-              decoration: const InputDecoration(hintText: 'название группы'),
+          child: SizedBox(
+            width: 500,
+            height: 500,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                DropdownButton<int>(
+                    hint: const Text("Выберите уровень"),
+                    items: lvls
+                        .map((e) => DropdownMenuItem<int>(
+                            value: e, child: Text(e.toString())))
+                        .toList(),
+                    value: chosenLvl,
+                    onChanged: (int? value) {
+                      if (value != null) {
+                        setState(() {
+                          //aaprint(value);
+                          chosenLvl = value;
+                          //parents.add(1);
+                          parents = getLvl(value - 1);
+                          chosenParent = parents[0];
+                        });
+                      }
+                    }),
+                DropdownButton<int>(
+                    hint: const Text("Выберите родителя"),
+                    value: chosenParent,
+                    items: parents
+                        .map((e) => DropdownMenuItem<int>(
+                            value: e, child: Text(widget.names[e] ?? '')))
+                        .toList(),
+                    onChanged: (int? value) {
+                      if (value != null) {
+                        setState(() {
+                          chosenParent = value;
+                        });
+                      }
+                    }),
+                TextFormField(
+                  controller: _nameController,
+                  decoration:
+                      const InputDecoration(hintText: 'название группы'),
+                ),
+                TextButton(
+                    onPressed: () {
+                      Navigator.pop(context, {
+                        "parent": chosenParent,
+                        "lvl": chosenLvl,
+                        "name": _nameController.text
+                      });
+                    },
+                    child: Text("подтвердить"))
+              ],
             ),
-            TextButton(
-                onPressed: () {
-                  Navigator.pop(context, {
-                    "parent": chosenParent,
-                    "lvl": chosenLvl,
-                    "name": _nameController.text
-                  });
-                },
-                child: Text("подтвердить"))
-          ],
-        ),
-      ),
-    ));
+          ),
+        ));
   }
 }
