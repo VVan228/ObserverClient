@@ -39,7 +39,7 @@ class UserListImpl {
   void openGroupDialog(int userId) async {
     List<String>? labels = await hierarchyModel.getLabels();
     List<Group>? groups =
-        await hierarchyModel.getGroupsByLevel((labels?.length ?? 1) - 1);
+        await hierarchyModel.getGroupsByLevel((labels?.length ?? 1));
     int? groupId = await _view?.getGroupId(groups ?? []);
     if (groupId != null) {
       hierarchyModel.addStudentToGroup(groupId, userId);

@@ -110,15 +110,15 @@ class _TeacherPageState extends State<TeacherPage> implements TeacherView {
                   int testId = tests[index].id ?? 1;
                   return GestureDetector(
                     onTap: () {
-                      if (notAutoCheck) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => CheckAnswerList(
-                                    test: tests[index],
-                                  )),
-                        );
-                      }
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => CheckAnswerList(
+                                  test: tests[index],
+                                  notAutoCheck: notAutoCheck,
+                                )),
+                      );
+
                       //Navigator.push(
                       //  context,
                       //  MaterialPageRoute(

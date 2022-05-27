@@ -7,17 +7,20 @@ import 'package:observer_client/presenters/teacher_page_impl.dart';
 import 'package:observer_client/views/interfaces/teacher_view.dart';
 import 'package:observer_client/views/set_check_answer.dart';
 import 'package:observer_client/views/sign_in_page.dart';
+import 'package:observer_client/views/test_answer_page.dart';
 
 import '../entities/user/role.dart';
 import '../presenters/check_answer_list_impl.dart';
 import 'interfaces/check_answer_list_view.dart';
 
 class CheckAnswerList extends StatefulWidget {
-  CheckAnswerList({Key? key, required this.test}) : super(key: key);
+  CheckAnswerList({Key? key, required this.test, required this.notAutoCheck})
+      : super(key: key);
 
   CheckAnswerListImpl presenter = CheckAnswerListImpl();
   AuthModel auth = AuthModel.getInstance();
   Test test;
+  bool notAutoCheck;
 
   @override
   State<CheckAnswerList> createState() => _CheckAnswerListState();
@@ -82,14 +85,25 @@ class _CheckAnswerListState extends State<CheckAnswerList>
                   String name = tests[index].student.name;
                   return GestureDetector(
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => SetCheckAnswer(
-                                  test: widget.test,
-                                  testAnswer: tests[index],
-                                )),
-                      );
+                      if (widget.notAutoCheck) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => SetCheckAnswer(
+                                    test: widget.test,
+                                    testAnswer: tests[index],
+                                  )),
+                        );
+                      } else {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => TestAnswerPage(
+                                    test: widget.test,
+                                    answer: tests[index],
+                                  )),
+                        );
+                      }
                     },
                     child: Card(
                       child: Padding(
