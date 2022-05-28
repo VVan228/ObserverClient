@@ -88,7 +88,7 @@ class TestsModel {
   }
 
   Future<List<Test>?> getTestsToCheck() async {
-    String stringPath = globalPath + "/tests/get/testsToCheck";
+    String stringPath = globalPath + "/tests/get/byUser/toCheck";
 
     var path = Uri.parse(stringPath);
 
@@ -113,7 +113,7 @@ class TestsModel {
   }
 
   Future<List<Test>?> getNotAnsweredTests() async {
-    String stringPath = globalPath + "/tests/get/notAnswered";
+    String stringPath = globalPath + "/tests/get/byUser/notAnswered";
 
     var path = Uri.parse(stringPath);
 
@@ -130,9 +130,9 @@ class TestsModel {
       return null;
     }
     //print(response.body);
-    //Map<String, dynamic> bodyMap = json.decode(response.body);
+    Map<String, dynamic> bodyMap = json.decode(response.body);
 
-    List<dynamic> testsList = json.decode(response.body);
+    List<dynamic> testsList = bodyMap["content"];
     List<Test> testsListMapped = testsList.map((e) => Test.fromMap(e)).toList();
     return testsListMapped;
   }
